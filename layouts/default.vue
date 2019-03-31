@@ -58,11 +58,14 @@
     </v-navigation-drawer>
     <v-footer :fixed="fixed" app>
       <span>&copy; 2019</span>
+
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import axios from '../.nuxt/axios'
+
 export default {
   data() {
     return {
@@ -86,6 +89,7 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js'
     }
-  }
+  },
+
 }
 </script>

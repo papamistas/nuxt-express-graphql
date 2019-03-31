@@ -1,70 +1,147 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <div class="text-xs-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline"
-          >Welcome to the Vuetify + Nuxt.js template</v-card-title
-        >
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a href="https://vuetifyjs.com" target="_blank">documentation</a>.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a href="https://chat.vuetifyjs.com/" target="_blank" title="chat"
-              >discord</a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-              >issue board</a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a href="https://nuxtjs.org/" target="_blank">Nuxt Documentation</a>
-          <br />
-          <a href="https://github.com/nuxt/nuxt.js" target="_blank"
-            >Nuxt GitHub</a
-          >
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" flat nuxt to="/inspire">Continue</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
-</template>
+  <div>
+    <a href="/auth/facebook">Login with Facebook</a>
+    <a href="/auth/google">Login with google</a>
 
+    <button v-on:click="signinFb">login FB</button>
+    <form action="/auth/login" method="post">
+      <div>
+        <label>Username:</label>
+        <input type="text" name="username"/>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input type="password" name="password"/>
+      </div>
+      <div>
+        <input type="submit" value="Log In"/>
+      </div>
+    </form>
+    <div v-if="this.$store.casas">
+      <Results v-bind:casas="this.$store.casas"></Results>
+    </div>
+    <Signin></Signin>
+    <hr>
+    <hr>
+    <Signup></Signup>
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <AdvancedSearch />
+    <Search />
+    <h3>Example 1</h3>
+    <v-btn color="success" @click="getLanguage">Success</v-btn>
+
+    <div v-if="casas">
+      <Results :casas="this.casas"></Results>
+
+      <div>
+        <div id="results">
+          <div v-for="casa in casas">
+            <span>
+              {{ casa.cod_casa }}
+            </span>
+            <span>
+              {{ casa.designacao }}
+            </span>
+            <span>
+              {{ casa.destino_complex }}
+            </span>
+
+            <div v-for="periodo in casa.periodos">
+              <span>
+                {{ periodo.inicio }}
+              </span>
+              <span>
+                {{ periodo.fim }}
+              </span>
+              <span>
+                {{ periodo.precoSemana }}
+              </span>
+            </div>
+            <div v-for="feedback in casa.feedbacks">
+              <span>
+                {{ feedback.inicio }}
+              </span>
+              <span>
+                {{ feedback.fim }}
+              </span>
+              <span>
+                {{ feedback.precoSemana }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+  </div>
+</template>
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import axios from 'axios'
+import Search from '../components/Search'
+
+import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch'
+import Results from '../components/Results'
 
 export default {
+  name: 'App',
   components: {
-    Logo,
-    VuetifyLogo
+    Results,
+    AdvancedSearch,
+    Search
+  },
+
+  data() {
+    return {
+      casas: this.$store.casas
+    }
+  },
+  /* created() {
+        this.rand = Math.round(Math.random() * 1000)
+        this.getLanguage()
+    }, */
+
+  methods: {
+    async getLanguage() {
+      alert('blabla')
+      try {
+        const res = await axios.post('http://localhost:7000/graphql', {
+          query: `{
+    casas {
+      cod_casa
+      designacao
+      destino
+      destino_complex
+      titulo
+          seoTitle
+        periodos {
+          id
+          inicio
+          fim
+          precoSemana
+        }
+        feedbacks {
+          comment
+          valor_voto
+
+        }
+
+  }
+}`
+        })
+        this.casas = res.data.data.casas
+        // Results.$forceUpdate();
+        this.$store.casas = this.casas
+      } catch (e) {
+        console.log('err', e)
+      }
+    },
+    signinFb: function (event) {
+      alert('fb')
+      this.$http
+        .get('/auth/facebook',{ crossdomain: true })
+        .then(response => (this.info = response))
+    }
   }
 }
 </script>

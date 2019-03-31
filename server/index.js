@@ -1,28 +1,20 @@
-import { ApolloServer, gql } from "apollo-server-express";
+const { Nuxt, Builder } = require('nuxt')
 import faker from "faker";
 import lodash from "lodash";
 import typeDefs from "./schema";
 import resolvers from "./resolvers";
 import db from "./models";
-
+import passport from 'passport'
+const { ApolloServer, gql } = require('apollo-server-express')
 
 const express = require('express')
 const consola = require('consola')
-const { Nuxt, Builder } = require('nuxt')
+
 const app = express()
 
 // Import and Set Nuxt.js options
 
-const passport = require('passport')
-app.use(passport.initialize());
-app.use(passport.session());
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
 
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
@@ -40,7 +32,7 @@ const server = new ApolloServer({
   context: { db }
 });
 server.applyMiddleware({ app })
-app.use(myroutes.handler)
+//app.use(myroutes.handler)
 // app.use(express.static("app/dist"));
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());
@@ -62,7 +54,7 @@ app.use(
 
 function checkAuth(req, res, next) {
   if (!req.session.passport) {
-    res.send("You are not authorized to view this page");
+    res.send('You are not authorized to view this page')
   } else {
     next();
   }
@@ -87,8 +79,7 @@ async function start() {
 
   // Listen the server
   app.listen(port, host,() =>
-    myroutes.handler(app,passport,checkAuth)
-  )
+    myroutes.handler(app,checkAuth))
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

@@ -1,8 +1,18 @@
-import config from "./config/configKeys";
-import db from "./models";
+import passport from 'passport'
+import config from './config/configKeys'
+import db from './models'
 
-const requestHandler = (app, passport, checkAuth) => {
-  let Strategy = require("passport-facebook").Strategy;
+passport.initialize();
+passport.session();
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+const requestHandler = (app, checkAuth) => {
+  const Strategy = require('passport-facebook').Strategy
   passport.use(
     new Strategy(config.fb, function(accessToken, refreshToken, profile, cb) {
       // In this example, the user's Facebook profile is supplied as the user
@@ -10,7 +20,7 @@ const requestHandler = (app, passport, checkAuth) => {
       // be associated with a user record in the application's database, which
       // allows for account linking and authentication with other identity
       // providers.
-      var User = db.sequelize.import("./models/cliente.js");
+      var User = db.sequelize.import('./models/cliente.js')
 
       User.findOrCreate({
         where: { fb_id: profile.id },
@@ -21,7 +31,7 @@ const requestHandler = (app, passport, checkAuth) => {
     })
   );
 
-  let GoogleStrategy = require("passport-google-oauth20").Strategy;
+  const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
   passport.use(
     new GoogleStrategy(config["ggl"], function(
@@ -40,7 +50,7 @@ const requestHandler = (app, passport, checkAuth) => {
     })
   );
 
-  let LocalStrategy = require("passport-local").Strategy;
+  const LocalStrategy = require("passport-local").Strategy;
 
   passport.use(
     new LocalStrategy(function(username, password, done) {
@@ -72,11 +82,11 @@ const requestHandler = (app, passport, checkAuth) => {
     })
   );
 
-  app.post(
-    "/auth/login",
-    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/login"
+  app.get(
+    '/auth/login',
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/login'
     })
   );
 
