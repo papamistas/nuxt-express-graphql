@@ -73,4 +73,4 @@ export default `
     updatePost(id: ID!, title: String, content:String!): [Int!]!
     deletePost(id: ID!): Int!
   }
-`;
+`

@@ -6,7 +6,7 @@ export default {
     feedbackcomment: (parent, args, context, info) =>
       parent.getFeedbackcomment(),
     destino_complex: (parent, args, context, info) =>
-      parent.designacao + " esta casa encontras-se em zona de " + parent.destino
+      parent.designacao + ' esta casa encontras-se em zona de ' + parent.destino
 
     /*{
             debugger;
@@ -60,4 +60,4 @@ export default {
         }
       })
   }
-};
+}

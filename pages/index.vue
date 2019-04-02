@@ -3,39 +3,35 @@
     <a href="/auth/facebook">Login with Facebook</a>
     <a href="/auth/google">Login with google</a>
 
-    <button v-on:click="signinFb">login FB</button>
+    <button @:click="signinFb">login FB</button>
     <form action="/auth/login" method="post">
       <div>
         <label>Username:</label>
-        <input type="text" name="username"/>
+        <input type="text" name="username" />
       </div>
       <div>
         <label>Password:</label>
-        <input type="password" name="password"/>
+        <input type="password" name="password" />
       </div>
       <div>
-        <input type="submit" value="Log In"/>
+        <input type="submit" value="Log In" />
       </div>
     </form>
-    <div v-if="this.$store.casas">
-      <Results v-bind:casas="this.$store.casas"></Results>
+    <div v-if="casas">
+      <Results :casas="casas"></Results>
     </div>
-    <Signin></Signin>
-    <hr>
-    <hr>
-    <Signup></Signup>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <AdvancedSearch />
+
+    <HelloWorld msg="Welcome to Your Vue.js App" />
     <Search />
     <h3>Example 1</h3>
     <v-btn color="success" @click="getLanguage">Success</v-btn>
 
     <div v-if="casas">
-      <Results :casas="this.casas"></Results>
+      <Results :casas="casas"></Results>
 
       <div>
         <div id="results">
-          <div v-for="casa in casas">
+          <div v-for="casa in casas" :key="casa">
             <span>
               {{ casa.cod_casa }}
             </span>
@@ -46,7 +42,7 @@
               {{ casa.destino_complex }}
             </span>
 
-            <div v-for="periodo in casa.periodos">
+            <div v-for="periodo in casa.periodos" :key="periodo">
               <span>
                 {{ periodo.inicio }}
               </span>
@@ -57,7 +53,7 @@
                 {{ periodo.precoSemana }}
               </span>
             </div>
-            <div v-for="feedback in casa.feedbacks">
+            <div v-for="feedback in casa.feedbacks" :key="feedback">
               <span>
                 {{ feedback.inicio }}
               </span>
@@ -80,22 +76,16 @@
 import axios from 'axios'
 import Search from '../components/Search'
 
-import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch'
 import Results from '../components/Results'
 
 export default {
+  auth: false,
   name: 'App',
   components: {
     Results,
-    AdvancedSearch,
     Search
   },
 
-  data() {
-    return {
-      casas: this.$store.casas
-    }
-  },
   /* created() {
         this.rand = Math.round(Math.random() * 1000)
         this.getLanguage()
@@ -103,7 +93,6 @@ export default {
 
   methods: {
     async getLanguage() {
-      alert('blabla')
       try {
         const res = await axios.post('http://localhost:7000/graphql', {
           query: `{
@@ -131,15 +120,13 @@ export default {
         })
         this.casas = res.data.data.casas
         // Results.$forceUpdate();
-        this.$store.casas = this.casas
-      } catch (e) {
-        console.log('err', e)
-      }
+        // this.$store.state.casas = this.casas
+      } catch (e) {}
     },
-    signinFb: function (event) {
+    signinFb: function(event) {
       alert('fb')
-      this.$http
-        .get('/auth/facebook',{ crossdomain: true })
+      axios
+        .get('/auth/facebook', { crossdomain: true })
         .then(response => (this.info = response))
     }
   }

@@ -3,7 +3,20 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
-
+  build: {
+    filenames: {
+      chunk: '[name].js'
+    },
+    extend(config, ctx) {
+      const path = require('path');
+      // Run ESLint on save
+      if (ctx.isDev && ctx.isClient) {
+        if (ctx.isDev && ctx.isClient) {
+          config.devtool = '#source-map'
+        }
+      }
+    }
+  },
   /*
    ** Headers of the page
    */
@@ -45,8 +58,40 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/auth'
   ],
+  auth: {
+    // Options
+    strategies: {
+      local: {
+        endpoints: {
+          login: { propertyName: 'token.accessToken' }
+        }
+      },
+
+      facebook: {
+        client_id: '2283537038597632',
+        userinfo_endpoint:
+          'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
+        scope: ['public_profile', 'email', 'user_birthday']
+      },
+      google: {
+        client_id:
+          '956748748298-kr2t08kdbjq3ke18m3vkl6k843mra1cg.apps.googleusercontent.com'
+      },
+
+      twitter: {
+        client_id: 'FAJNuxjMTicff6ciDKLiZ4t0D'
+      }
+    },
+    redirect: {
+      callback: '/auth/facebook/callback'
+    }
+  },
+  router: {
+    middleware: ['auth']
+  },
   /*
    ** Axios module configuration
    */

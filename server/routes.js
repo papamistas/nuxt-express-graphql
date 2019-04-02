@@ -2,15 +2,15 @@ import passport from 'passport'
 import config from './config/configKeys'
 import db from './models'
 
-passport.initialize();
-passport.session();
+passport.initialize()
+passport.session()
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
+  cb(null, user)
+})
 
 passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
+  cb(null, obj)
+})
 const requestHandler = (app, checkAuth) => {
   const Strategy = require('passport-facebook').Strategy
   passport.use(
@@ -26,61 +26,61 @@ const requestHandler = (app, checkAuth) => {
         where: { fb_id: profile.id },
         defaults: { cliente: profile.displayName }
       }).then(function(user) {
-        return cb(null, user);
-      });
+        return cb(null, user)
+      })
     })
-  );
+  )
 
-  const GoogleStrategy = require("passport-google-oauth20").Strategy;
+  const GoogleStrategy = require('passport-google-oauth20').Strategy
 
   passport.use(
-    new GoogleStrategy(config["ggl"], function(
+    new GoogleStrategy(config['ggl'], function(
       accessToken,
       refreshToken,
       profile,
       cb
     ) {
-      var User = db.sequelize.import("./models/cliente.js");
+      var User = db.sequelize.import('./models/cliente.js')
       User.findOrCreate({
         where: { google_id: profile.id },
         defaults: { cliente: profile.displayName }
       }).then(function(user, err) {
-        return cb(null, user);
-      });
+        return cb(null, user)
+      })
     })
-  );
+  )
 
-  const LocalStrategy = require("passport-local").Strategy;
+  const LocalStrategy = require('passport-local').Strategy
 
   passport.use(
     new LocalStrategy(function(username, password, done) {
-      var User = db.sequelize.import("./models/cliente.js");
+      var User = db.sequelize.import('./models/cliente.js')
       User.findOne({ where: { email: username } }).then(function(user, err) {
         {
           if (err) {
-            return done(err);
+            return done(err)
           }
           if (!user) {
-            return done(null, false, { message: "Incorrect username." });
+            return done(null, false, { message: 'Incorrect username.' })
           }
           /*if (!user.validPassword(password)) {
                         return done(null, false, {message: 'Incorrect password.'});
                     }*/
-          done(null, user);
+          done(null, user)
         }
-      });
+      })
     })
-  );
+  )
 
-  app.get("/auth/facebook", passport.authenticate("facebook"));
+  app.get('/auth/facebook', passport.authenticate('facebook'))
 
   app.get(
-    "/auth/facebook/callback",
-    passport.authenticate("facebook", {
-      successRedirect: "/test",
-      failureRedirect: "/login"
+    '/auth/facebook/callback',
+    passport.authenticate('facebook', {
+      successRedirect: '/test',
+      failureRedirect: '/login'
     })
-  );
+  )
 
   app.get(
     '/auth/login',
@@ -88,39 +88,39 @@ const requestHandler = (app, checkAuth) => {
       successRedirect: '/',
       failureRedirect: '/login'
     })
-  );
+  )
 
   app.get(
-    "/auth/google",
-    passport.authenticate("google", {
-      scope: ["https://www.googleapis.com/auth/plus.login"]
+    '/auth/google',
+    passport.authenticate('google', {
+      scope: ['https://www.googleapis.com/auth/plus.login']
     })
-  );
+  )
 
   app.get(
-    "/auth/google/callback",
-    passport.authenticate("google", {
-      failureRedirect: "/",
-      successRedirect: "/"
+    '/auth/google/callback',
+    passport.authenticate('google', {
+      failureRedirect: '/',
+      successRedirect: '/'
     }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect("/");
+      res.redirect('/')
     }
-  );
-  app.get("/login", function() {
-    console.log("redirected to login again");
-  });
-  app.get("/test", checkAuth, function(req, res) {
-    console.log("redirected to test again");
-    res.redirect("/about");
-  });
-  app.get("/logout", function(req, res) {
-    req.logout();
-    req.session = null;
+  )
+  app.get('/login', function() {
+    console.log('redirected to login again')
+  })
+  app.get('/test', checkAuth, function(req, res) {
+    console.log('redirected to test again')
+    res.redirect('/about')
+  })
+  app.get('/logout', function(req, res) {
+    req.logout()
+    req.session = null
     //req.session.destroy();
-    return res.redirect("/");
-  });
-};
+    return res.redirect('/')
+  })
+}
 
-module.exports = { handler: requestHandler };
+module.exports = { handler: requestHandler }

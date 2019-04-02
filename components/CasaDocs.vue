@@ -1,12 +1,11 @@
 <template>
-    <div class="CasaDocs">
-        Casa docs component  ..certificados ,plantas,etc...
-    </div>
+  <div class="CasaDocs">
+    Casa docs component ..certificados ,plantas,etc...
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-        },
-    };
+export default {
+  props: {}
+}
 </script>

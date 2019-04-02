@@ -1,12 +1,11 @@
 <template>
-    <div class="CasaImages">
-        Casa Images
-    </div>
+  <div class="CasaImages">
+    Casa Images
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-        },
-    };
+export default {
+  props: {}
+}
 </script>

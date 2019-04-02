@@ -1,9 +1,17 @@
-export const state = () => ({
-  casas: ''
-})
+import Vuex from 'vuex'
 
-export const mutations = {
-  increment(state) {
-    state.counter++
-  }
+const createStore = () => {
+  return new Vuex.Store({
+    state: () => ({
+      counter: 0,
+      casas: ''
+    }),
+    mutations: {
+      increment(state) {
+        state.counter++
+      }
+    }
+  })
 }
+
+export default createStore
