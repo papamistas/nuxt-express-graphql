@@ -86,7 +86,7 @@ module.exports = {
       }
     },
     redirect: {
-      callback: '/auth/facebook/callback'
+      callback: '/auth/google/callback'
     }
   },
   router: {

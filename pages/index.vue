@@ -87,9 +87,9 @@ export default {
   },
 
   /* created() {
-        this.rand = Math.round(Math.random() * 1000)
-        this.getLanguage()
-    }, */
+    this.rand = Math.round(Math.random() * 1000)
+    this.getLanguage()
+  }, */
 
   methods: {
     async getLanguage() {
@@ -120,7 +120,7 @@ export default {
         })
         this.casas = res.data.data.casas
         // Results.$forceUpdate();
-        // this.$store.state.casas = this.casas
+        this.store.state.casas = this.casas
       } catch (e) {}
     },
     signinFb: function(event) {
