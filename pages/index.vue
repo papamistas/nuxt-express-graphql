@@ -1,8 +1,9 @@
 <template>
   <div>
-    <a href="/auth/facebook">Login with Facebook</a>
-    <a href="/auth/google">Login with google</a>
-
+    <div v-if="this.$auth.loggedIn">
+      <a href="/auth/facebook">Login with Facebook</a>
+      <a href="/auth/google">Login with google</a>
+    </div>
     <button @:click="signinFb">login FB</button>
     <form action="/auth/login" method="post">
       <div>
@@ -86,10 +87,13 @@ export default {
     Search
   },
 
-  /* created() {
-    this.rand = Math.round(Math.random() * 1000)
-    this.getLanguage()
-  }, */
+  created() {
+    /* this.rand = Math.round(Math.random() * 1000)
+    this.getLanguage() */
+    const consola = require('consola')
+
+    consola.info(this.$auth.loggedIn)
+  },
 
   methods: {
     async getLanguage() {

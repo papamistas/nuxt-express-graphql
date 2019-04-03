@@ -6,9 +6,7 @@ import resolvers from './resolvers'
 import db from './models'
 import passport from 'passport'
 const { ApolloServer, gql } = require('apollo-server-express')
-
 const express = require('express')
-const consola = require('consola')
 
 const app = express()
 
@@ -30,7 +28,7 @@ const server = new ApolloServer({
   context: { db }
 })
 server.applyMiddleware({ app })
-//app.use(myroutes.handler)
+// app.use(myroutes.handler)
 // app.use(express.static("app/dist"));
 app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
 app.use(bodyParser.json())
