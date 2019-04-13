@@ -1,10 +1,10 @@
-const { Nuxt, Builder } = require('nuxt')
 import faker from 'faker'
 import lodash from 'lodash'
+import passport from 'passport'
 import typeDefs from './schema'
 import resolvers from './resolvers'
 import db from './models'
-import passport from 'passport'
+const { Nuxt, Builder } = require('nuxt')
 const { ApolloServer, gql } = require('apollo-server-express')
 const express = require('express')
 
@@ -16,11 +16,11 @@ const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 const bcrypt = require('bcrypt')
 
-const myroutes = require('./routes')
-//,senha:bcrypt(password)
-//bcrypt.compare(passwoed,user.senha)
+//, senha:bcrypt(password)
+// bcrypt.compare(passwoed,user.senha)
 
 const config = require('../nuxt.config.js')
+const myroutes = require('./routes')
 config.dev = !(process.env.NODE_ENV === 'production')
 const server = new ApolloServer({
   typeDefs: gql(typeDefs),
@@ -74,6 +74,8 @@ async function start() {
 
   // Listen the server
   app.listen(port, host, () => myroutes.handler(app, checkAuth))
+
+
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      casas2: this.$state.casas,
+      casas2: this.casas,
       codCasa: null,
       seoTitle: null
     }

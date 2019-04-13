@@ -78,7 +78,7 @@ module.exports = {
       },
       google: {
         client_id:
-          '956748748298-kr2t08kdbjq3ke18m3vkl6k843mra1cg.apps.googleusercontent.com'
+          '150235012843-eibaqvkld98i32jl8heif2l4krervj5d.apps.googleusercontent.com'
       },
 
       twitter: {

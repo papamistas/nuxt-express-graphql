@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="this.$auth.loggedIn">
+    <div v-if="!this.$auth.loggedIn">
       <a href="/auth/facebook">Login with Facebook</a>
       <a href="/auth/google">Login with google</a>
     </div>
@@ -22,7 +22,6 @@
       <Results :casas="casas"></Results>
     </div>
 
-    <HelloWorld msg="Welcome to Your Vue.js App" />
     <Search />
     <h3>Example 1</h3>
     <v-btn color="success" @click="getLanguage">Success</v-btn>
@@ -86,10 +85,13 @@ export default {
     Results,
     Search
   },
-
+  data: function() {
+    return {
+      casas: []
+    }
+  },
   created() {
-    /* this.rand = Math.round(Math.random() * 1000)
-    this.getLanguage() */
+    // this.getLanguage()
     const consola = require('consola')
 
     consola.info(this.$auth.loggedIn)
