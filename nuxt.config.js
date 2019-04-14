@@ -3,20 +3,7 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
-  build: {
-    filenames: {
-      chunk: '[name].js'
-    },
-    extend(config, ctx) {
-      const path = require('path');
-      // Run ESLint on save
-      if (ctx.isDev && ctx.isClient) {
-        if (ctx.isDev && ctx.isClient) {
-          config.devtool = '#source-map'
-        }
-      }
-    }
-  },
+
   /*
    ** Headers of the page
    */
@@ -56,10 +43,51 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    [
+      'nuxt-i18n',
+      {
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected',
+          alwaysRedirect: true
+        },
+        locales: [
+          {
+            code: 'en',
+            file: 'en-US.js',
+            name: 'English',
+            iso: 'en-US'
+          },
+          {
+            code: 'es',
+            file: 'es-ES.js',
+            name: 'Espanol',
+            iso: 'es-ES'
+          },
+          {
+            code: 'fr',
+            file: 'fr-FR.js',
+            name: 'Francais',
+            iso: 'fr-FR'
+          },
+          {
+            code: 'pt',
+            file: 'pt-PT.js',
+            name: 'Portugues',
+            iso: 'pt-PT'
+          }
+        ],
+        lazy: true,
+        langDir: 'lang/',
+        defaultLocale: 'pt',
+        vueI18n: {
+          fallbackLocale: 'pt'
+        }
+      }
+    ]
   ],
   auth: {
     // Options
@@ -116,6 +144,7 @@ module.exports = {
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
+        config.devtool = '#source-map'
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,

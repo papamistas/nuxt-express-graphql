@@ -1,5 +1,11 @@
 <template>
   <div>
+    <nuxt-link
+      v-for="locale in availableLocales"
+      :key="locale.code"
+      :to="switchLocalePath(locale.code)"
+      >{{ locale.name }}</nuxt-link
+    >
     <div v-if="!this.$auth.loggedIn">
       <a href="/auth/facebook">Login with Facebook</a>
       <a href="/auth/google">Login with google</a>
@@ -23,7 +29,7 @@
     </div>
 
     <Search />
-    <h3>Example 1</h3>
+    <h3>Example 1{{ $t('welcome') }}</h3>
     <v-btn color="success" @click="getLanguage">Success</v-btn>
 
     <div v-if="casas">
@@ -88,6 +94,11 @@ export default {
   data: function() {
     return {
       casas: []
+    }
+  },
+  computed: {
+    availableLocales() {
+      return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
     }
   },
   created() {

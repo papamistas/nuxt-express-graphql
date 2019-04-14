@@ -51,6 +51,7 @@
     "negotiator": "^0.6.1",
     "net": "^1.0.2",
     "nuxt": "^2.4.0",
+    "nuxt-i18n": "^5.8.5",
     "passport": "^0.4.0",
     "passport-facebook": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",
